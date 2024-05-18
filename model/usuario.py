@@ -1,10 +1,7 @@
 from utils.db import db
-
 class Usuario(db.Model):
     __tablename__ = 'usuario'
-    
     id_usuario = db.Column(db.Integer, primary_key = True)
-    
     nombre = db.Column(db.String(20))
     apellido = db.Column(db.String(20))
     email = db.Column(db.String(50))
@@ -16,7 +13,6 @@ class Usuario(db.Model):
     
     def __init__(self, nombre, apellido, email, contrasena,
                  telefono, direccion, fecha_registro, rol):
-        
         self.nombre = nombre
         self.apellido = apellido
         self.email = email

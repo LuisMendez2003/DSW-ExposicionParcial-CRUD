@@ -1,13 +1,9 @@
 from utils.db import db
 from model.usuario import Usuario 
-
 class Especialista(db.Model):
     __tablename__ = 'especialista'
-    
-    id_especialista = db.Column(db.String(8), primary_key = True)
-    
+    id_especialista = db.Column(db.String(8), primary_key = True) 
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'))
-    
     cedula_profesional = db.Column(db.String(5))
     especialidad = db.Column(db.String(20))
     anios_experiencia = db.Column(db.Integer)
@@ -23,3 +19,4 @@ class Especialista(db.Model):
         self.especialidad = especialidad
         self.anios_experiencia = anios_experiencia
         self.fecha_ingreso = fecha_ingreso
+        
