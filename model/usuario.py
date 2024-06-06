@@ -5,7 +5,7 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(20))
     apellido = db.Column(db.String(20))
     email = db.Column(db.String(50))
-    contrasena = db.Column(db.String(20))
+    contrasena = db.Column(db.String(200))
     telefono = db.Column(db.String(9))
     direccion = db.Column(db.String(255))
     fecha_registro = db.Column(db.Date)
