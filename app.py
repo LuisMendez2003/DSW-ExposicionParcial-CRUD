@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI']= SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #CORS para localhost:4200
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
+CORS(app)
 
 #SQLAlchemy(app)
 
