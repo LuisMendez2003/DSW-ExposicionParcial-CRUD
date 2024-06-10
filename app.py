@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from utils.db import db
 from services.usuario_services import usuario_services
 from services.estudiante_services import estudiante_services
@@ -9,6 +10,9 @@ from config import SQLALCHEMY_DATABASE_URI
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']= SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#CORS para localhost:4200
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 
 #SQLAlchemy(app)
 

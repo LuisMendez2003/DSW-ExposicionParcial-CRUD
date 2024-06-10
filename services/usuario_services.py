@@ -121,8 +121,14 @@ def update_Usuario(id):
     return make_response(jsonify(data), 200)
 
 #Login Autorizar
-@usuario_services.route('/usuarios/login', methods=['POST'])
+@usuario_services.route('/usuarios/login', methods=['POST','OPTIONS'])
 def login_usuario():
+
+    #VERIFICA POST
+    if request.method == 'OPTIONS':
+        return make_response(jsonify({'message': 'Allow CORS', 'status': 200}), 200)
+
+    
     # Obtener los datos de la solicitud
     data = request.get_json()
     email = data.get('email')
