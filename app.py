@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_cors import CORS
 from utils.db import db
-from services.usuario_services import usuario_services
-from services.estudiante_services import estudiante_services
-from services.especialista_services import especialista_services
+
 #from flask_sqlalchemy import SQLAlchemy
 from config import SQLALCHEMY_DATABASE_URI
+
+from services import register_services
+
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']= SQLALCHEMY_DATABASE_URI
@@ -15,11 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
 
 #SQLAlchemy(app)
+db.init_app(app)
 
-db.init_app(app) 
-app.register_blueprint(usuario_services)
-app.register_blueprint(estudiante_services)
-app.register_blueprint(especialista_services)
+#Blueprints
+register_services(app)
+
 
 with app.app_context():
     db.create_all

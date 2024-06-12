@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify, make_response
 from utils.db import db
 from model.estudiante import Estudiante
+from model.realizaciontest import RealizacionTest
 from schemas.estudiante_schema import estudiante_schema, estudiantes_schema
+from schemas.realizaciontest_schema import realizacionesTest_Schema
 
 estudiante_services = Blueprint("estudiante_services",__name__)
 
@@ -125,4 +127,18 @@ def delete_Estudiante(id):
         'status': 200
     }
     
+    return make_response(jsonify(data), 200)
+
+# Obtener todas las realizaciones de test de un estudiante específico
+@estudiante_services.route('/estudiante/<int:id>/realizaciones-test', methods=['GET'])
+def get_realizaciones_estudiante(id):
+    realizaciones = RealizacionTest.query.filter_by(id_estudiante=str(id)).all()
+    realizaciones_result = realizacionesTest_Schema.dump(realizaciones)
+
+    data = {
+        'message': f'Realizaciones de test del estudiante {id}',
+        'status': 200,
+        'data': realizaciones_result
+    }
+
     return make_response(jsonify(data), 200)
