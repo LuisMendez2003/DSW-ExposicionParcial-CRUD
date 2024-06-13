@@ -7,8 +7,13 @@ from schemas.respuesta_schema import respuesta_schema, respuestas_schema
 respuesta_services = Blueprint("respuesta_services", __name__)
 
 # Crear una Respuesta
-@respuesta_services.route('/respuesta', methods=['POST'])
+@respuesta_services.route('/respuesta', methods=['POST','OPTIONS'])
 def create_respuesta():
+
+     #VERIFICA POST
+    if request.method == 'OPTIONS':
+        return make_response(jsonify({'message': 'Allow CORS', 'status': 200}), 200)
+
     id_realizaciontest = request.json.get('id_realizaciontest')
     alternativa = request.json.get('alternativa')
 

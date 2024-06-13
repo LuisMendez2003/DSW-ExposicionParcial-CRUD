@@ -8,8 +8,13 @@ from schemas.respuesta_schema import respuestas_schema
 realizaciontest_services = Blueprint("realizaciontest_services", __name__)
 
 # Crear una RealizacionTest
-@realizaciontest_services.route('/realizaciontest', methods=['POST'])
+@realizaciontest_services.route('/realizaciontest', methods=['POST','OPTIONS'])
 def create_realizaciontest():
+
+    #VERIFICA POST
+    if request.method == 'OPTIONS':
+        return make_response(jsonify({'message': 'Allow CORS', 'status': 200}), 200)
+
     id_test = request.json.get('id_test')
     id_estudiante = request.json.get('id_estudiante')
     fecha = request.json.get('fecha')
