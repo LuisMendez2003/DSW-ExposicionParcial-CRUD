@@ -8,7 +8,7 @@ class AlternativaSchema(ma.Schema):
         model = Alternativa
         fields = ('id_alternativa','id_pregunta','texto','puntaje','pregunta')
 
-pregunta = ma.Nested(PreguntaSchema)
+    pregunta = ma.Nested(PreguntaSchema)
 
 alternativa_schema = AlternativaSchema()
 alternativas_schema = AlternativaSchema(many=True)
