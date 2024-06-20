@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from utils.db import db
 from model.realizaciontest import RealizacionTest
+from model.estudiante import Estudiante
 from model.respuesta import Respuesta
 from schemas.realizaciontest_schema import realizacionTest_Schema, realizacionesTest_Schema
 from schemas.respuesta_schema import respuestas_schema

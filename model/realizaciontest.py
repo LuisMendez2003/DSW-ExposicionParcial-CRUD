@@ -9,8 +9,8 @@ class RealizacionTest(db.Model):
     id_estudiante = db.Column(db.String(8), db.ForeignKey('estudiante.id_estudiante'))
     fecha = db.Column(db.Date)
 
-    test = db.relationship('Test', backref = 'realizacionTest')
-    estudiante = db.relationship('Estudiante', backref = 'realizacionTest')
+    test = db.relationship('Test', backref = 'realizaciones_test')
+    estudiante = db.relationship('Estudiante', backref = 'realizaciones_test')
 
     def __init__(self,id_test,id_estudiante,fecha):
         self.id_test = id_test
