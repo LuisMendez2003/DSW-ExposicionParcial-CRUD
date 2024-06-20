@@ -69,6 +69,28 @@ def get_Estudiante(id):
     
     return make_response(jsonify(data), 200)
 
+#Obtener Estudiante por id_usuario
+@estudiante_services.route('/estudiante/usuario/<int:id_usuario>', methods = ['GET'])
+def get_Estudiante_ByUserId(id_usuario):
+    estudiante = Estudiante.query.filter_by(id_usuario=id_usuario).first()
+    
+    if not estudiante:
+        data = {
+            'message': 'Estudiante no registrado',
+            'status': 404
+        }
+        return make_response(jsonify(data), 404)
+    
+    result = estudiante_schema.dump(estudiante)
+    
+    data = {
+        'message': 'Estudiante encontrado',
+        'status': 200,
+        'data': result
+    }
+    
+    return make_response(jsonify(data), 200)
+
 #Modificar un Estudiante
 @estudiante_services.route('/estudiante/update/<int:id>', methods = ['PUT'])
 def update_Estudiante(id):
