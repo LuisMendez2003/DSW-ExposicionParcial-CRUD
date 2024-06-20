@@ -2,14 +2,15 @@ from flask import Blueprint, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils.db import db
 from model.usuario import Usuario
+from model.estudiante import Estudiante
+from model.especialista import Especialista
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 
-usuario_services = Blueprint("usuario_services",__name__)
+usuario_services = Blueprint("usuario_services", __name__)
 
-#Crear un Usuario
-@usuario_services.route('/usuario', methods = ['POST'])
+# Crear un Usuario
+@usuario_services.route('/usuario', methods=['POST'])
 def create_Usuario():
-    
     nombre = request.json.get('nombre')
     apellido = request.json.get('apellido')
     email = request.json.get('email')
@@ -19,11 +20,13 @@ def create_Usuario():
     fecha_registro = request.json.get('fecha_registro')
     rol = request.json.get('rol')
     
-    hash_password = generate_password_hash(contrasena, method = "pbkdf2:sha256")
+    hash_password = generate_password_hash(contrasena, method="pbkdf2:sha256")
 
-    new_usuario = Usuario(nombre = nombre, apellido = apellido, email = email,
-                          contrasena = hash_password, telefono = telefono, direccion = direccion,
-                          fecha_registro = fecha_registro, rol = rol)
+    new_usuario = Usuario(
+        nombre=nombre, apellido=apellido, email=email,
+        contrasena=hash_password, telefono=telefono, direccion=direccion,
+        fecha_registro=fecha_registro, rol=rol
+    )
     
     db.session.add(new_usuario)
     db.session.commit()
@@ -36,10 +39,10 @@ def create_Usuario():
         'data': result
     }
     
-    return make_response(jsonify(data),201)
+    return make_response(jsonify(data), 201)
 
-#Obtener Usuarios
-@usuario_services.route('/usuarios', methods = ['GET'])
+# Obtener Usuarios
+@usuario_services.route('/usuarios', methods=['GET'])
 def get_Usuarios():
     all_usuarios = Usuario.query.all()
     result = usuarios_schema.dump(all_usuarios)
@@ -52,8 +55,8 @@ def get_Usuarios():
     
     return make_response(jsonify(data), 200)
 
-#Obtener Usuario
-@usuario_services.route('/usuario/<int:id>', methods = ['GET'])
+# Obtener Usuario
+@usuario_services.route('/usuario/<int:id>', methods=['GET'])
 def get_Usuario(id):
     usuario = Usuario.query.get(id)
     
@@ -74,8 +77,8 @@ def get_Usuario(id):
     
     return make_response(jsonify(data), 200)
 
-#Modificar un Usuario
-@usuario_services.route('/usuario/update/<int:id>', methods = ['PUT'])
+# Modificar un Usuario
+@usuario_services.route('/usuario/update/<int:id>', methods=['PUT'])
 def update_Usuario(id):
     usuario = Usuario.query.get(id)
     
@@ -86,8 +89,6 @@ def update_Usuario(id):
         }
         return make_response(jsonify(data), 404)
     
-    
-
     nombre = request.json.get('nombre')
     apellido = request.json.get('apellido')
     email = request.json.get('email')
@@ -97,7 +98,7 @@ def update_Usuario(id):
     fecha_registro = request.json.get('fecha_registro')
     rol = request.json.get('rol')
     
-    hash_password = generate_password_hash(contrasena, method = "pbkdf2:sha256")
+    hash_password = generate_password_hash(contrasena, method="pbkdf2:sha256")
 
     usuario.nombre = nombre
     usuario.apellido = apellido
@@ -120,22 +121,20 @@ def update_Usuario(id):
 
     return make_response(jsonify(data), 200)
 
-#Login Autorizar
-@usuario_services.route('/usuarios/login', methods=['POST','OPTIONS'])
+# Login Autorizar
+@usuario_services.route('/usuarios/login', methods=['POST', 'OPTIONS'])
 def login_usuario():
-
-    #VERIFICA POST
+    # Verifica método OPTIONS para CORS
     if request.method == 'OPTIONS':
         return make_response(jsonify({'message': 'Allow CORS', 'status': 200}), 200)
 
-    
     # Obtener los datos de la solicitud
     data = request.get_json()
     email = data.get('email')
     contrasena = data.get('contrasena')
 
     # Buscar al usuario en la base de datos por email
-    usuario = Usuario.query.filter_by(email = email).first()
+    usuario = Usuario.query.filter_by(email=email).first()
 
     if not usuario:
         # Si el usuario no existe, devolver un error
@@ -143,14 +142,27 @@ def login_usuario():
 
     # Verificar la contraseña
     if check_password_hash(usuario.contrasena, contrasena):
-        # Si la contraseña es correcta, devolver un mensaje de éxito
-        return make_response(jsonify({'message': 'Inicio de sesión exitoso', 'status': 200}), 200)
+        # Determinar si es estudiante o especialista
+        estudiante = Estudiante.query.filter_by(id_usuario=usuario.id).first()
+        especialista = Especialista.query.filter_by(id_usuario=usuario.id).first()
+
+        # Preparar la respuesta
+        user_type = 'estudiante' if estudiante else 'especialista' if especialista else 'unknown'
+        user_id = estudiante.id_estudiante if estudiante else especialista.id_especialista if especialista else None
+
+        response_data = {
+            'message': 'Inicio de sesión exitoso',
+            'status': 200,
+            'user_type': user_type,
+            'user_id': user_id
+        }
+        return make_response(jsonify(response_data), 200)
     else:
         # Si la contraseña es incorrecta, devolver un error
         return make_response(jsonify({'message': 'Contraseña incorrecta', 'status': 401}), 401)
 
-#Borrar Usuario
-@usuario_services.route('/usuario/delete/<int:id>', methods = ['DELETE'])
+# Borrar Usuario
+@usuario_services.route('/usuario/delete/<int:id>', methods=['DELETE'])
 def delete_Usuario(id):
     usuario = Usuario.query.get(id)
     
