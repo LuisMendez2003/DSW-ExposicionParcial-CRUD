@@ -3,7 +3,7 @@ from model.test import Test
 from model.estudiante import Estudiante
 
 class RealizacionTest(db.Model):
-    __tablename__ = 'realizacionTest'
+    __tablename__ = 'realizaciontest'
     id_realizaciontest = db.Column(db.Integer, primary_key = True)
     id_test = db.Column(db.Integer, db.ForeignKey('test.id_test'))
     id_estudiante = db.Column(db.String(8), db.ForeignKey('estudiante.id_estudiante'))
