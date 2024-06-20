@@ -2,8 +2,6 @@ from flask import Blueprint, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils.db import db
 from model.usuario import Usuario
-from model.estudiante import Estudiante
-from model.especialista import Especialista
 from schemas.usuario_schema import usuario_schema, usuarios_schema
 
 usuario_services = Blueprint("usuario_services", __name__)
@@ -142,21 +140,8 @@ def login_usuario():
 
     # Verificar la contraseña
     if check_password_hash(usuario.contrasena, contrasena):
-        # Determinar si es estudiante o especialista
-        estudiante = Estudiante.query.filter_by(id_usuario=usuario.id).first()
-        especialista = Especialista.query.filter_by(id_usuario=usuario.id).first()
-
-        # Preparar la respuesta
-        user_type = 'estudiante' if estudiante else 'especialista' if especialista else 'unknown'
-        user_id = estudiante.id_estudiante if estudiante else especialista.id_especialista if especialista else None
-
-        response_data = {
-            'message': 'Inicio de sesión exitoso',
-            'status': 200,
-            'user_type': user_type,
-            'user_id': user_id
-        }
-        return make_response(jsonify(response_data), 200)
+        # Si la contraseña es correcta, devolver un mensaje de éxito
+        return make_response(jsonify({'message': 'Inicio de sesión exitoso', 'status': 200}), 200)
     else:
         # Si la contraseña es incorrecta, devolver un error
         return make_response(jsonify({'message': 'Contraseña incorrecta', 'status': 401}), 401)
