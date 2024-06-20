@@ -9,6 +9,10 @@ class RealizacionTest(db.Model):
     id_estudiante = db.Column(db.String(8), db.ForeignKey('estudiante.id_estudiante'))
     fecha = db.Column(db.Date)
 
+    puntaje = db.Column(db.Integer)
+    nivel = db.Column(db.String(20))
+    observaciones = db.Column(db.String(100))
+
     test = db.relationship('Test', backref = 'realizaciones_test')
     estudiante = db.relationship('Estudiante', backref = 'realizaciones_test')
 

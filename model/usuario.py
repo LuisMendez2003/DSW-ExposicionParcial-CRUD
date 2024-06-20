@@ -10,9 +10,10 @@ class Usuario(db.Model):
     direccion = db.Column(db.String(255))
     fecha_registro = db.Column(db.Date)
     rol = db.Column(db.String(20))
+    ubigeo = db.Column(db.String(8))
     
     def __init__(self, nombre, apellido, email, contrasena,
-                 telefono, direccion, fecha_registro, rol):
+                 telefono, direccion, fecha_registro, rol, ubigeo):
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
@@ -21,3 +22,4 @@ class Usuario(db.Model):
         self.direccion = direccion
         self.fecha_registro = fecha_registro
         self.rol = rol
+        self.ubigeo = ubigeo

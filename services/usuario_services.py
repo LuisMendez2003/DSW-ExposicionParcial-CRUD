@@ -17,13 +17,14 @@ def create_Usuario():
     direccion = request.json.get('direccion')
     fecha_registro = request.json.get('fecha_registro')
     rol = request.json.get('rol')
+    ubigeo = request.json.get('ubigeo')
     
     hash_password = generate_password_hash(contrasena, method="pbkdf2:sha256")
 
     new_usuario = Usuario(
         nombre=nombre, apellido=apellido, email=email,
         contrasena=hash_password, telefono=telefono, direccion=direccion,
-        fecha_registro=fecha_registro, rol=rol
+        fecha_registro=fecha_registro, rol=rol, ubigeo=ubigeo
     )
     
     db.session.add(new_usuario)
@@ -95,6 +96,7 @@ def update_Usuario(id):
     direccion = request.json.get('direccion')
     fecha_registro = request.json.get('fecha_registro')
     rol = request.json.get('rol')
+    ubigeo = request.json.get('ubigeo')
     
     hash_password = generate_password_hash(contrasena, method="pbkdf2:sha256")
 
@@ -106,6 +108,7 @@ def update_Usuario(id):
     usuario.direccion = direccion
     usuario.fecha_registro = fecha_registro
     usuario.rol = rol
+    usuario.ubigeo = ubigeo
     
     db.session.commit()
     

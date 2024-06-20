@@ -6,7 +6,7 @@ from utils.ma import ma
 class RealizacionTestSchema(ma.Schema):
     class Meta:
         model = RealizacionTest
-        fields = ('id_realizaciontest', 'id_test', 'id_estudiante', 'fecha', 'test', 'estudiante')
+        fields = ('id_realizaciontest', 'id_test', 'id_estudiante', 'fecha','puntaje','nivel','observaciones', 'test', 'estudiante')
 
     test = ma.Nested(TestSchema)
     estudiante = ma.Nested(EstudianteSchema)

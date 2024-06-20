@@ -111,9 +111,17 @@ def update_realizaciontest(id):
     id_estudiante = request.json.get('id_estudiante')
     fecha = request.json.get('fecha')
 
+    puntaje = request.json.get('puntaje')
+    nivel = request.json.get('nivel')
+    observaciones = request.json.get('observaciones')
+
     realizaciontest.id_test = id_test
     realizaciontest.id_estudiante = id_estudiante
     realizaciontest.fecha = fecha
+
+    realizaciontest.puntaje = puntaje
+    realizaciontest.nivel = nivel
+    realizaciontest.observaciones = observaciones
 
     db.session.commit()
 

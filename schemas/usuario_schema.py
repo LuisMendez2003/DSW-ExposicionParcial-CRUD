@@ -12,6 +12,7 @@ class UsuarioSchema(ma.Schema):
     direccion = fields.String()
     fecha_registro = fields.Date()
     rol = fields.String()
+    ubigeo = fields.String()
     
 usuario_schema = UsuarioSchema()
 usuarios_schema = UsuarioSchema(many = True)
