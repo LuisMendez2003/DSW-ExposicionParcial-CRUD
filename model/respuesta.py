@@ -5,8 +5,9 @@ class Respuesta(db.Model):
     __tablename__ = 'respuesta'
     id_respuesta = db.Column(db.Integer, primary_key = True)
     id_realizaciontest = db.Column(db.Integer, db.ForeignKey('realizaciontest.id_realizaciontest'))
-    alternativa = db.Column(db.Integer)
+    alternativa = db.Column(db.Integer, db.ForeignKey('alternativa.id_alternativa'))
 
+    alternativa_relacionada = db.relationship('Alternativa', backref = 'respuesta')
     realizacionTest = db.relationship('RealizacionTest', backref = 'respuesta')
 
     def __init__(self,id_realizaciontest,alternativa):

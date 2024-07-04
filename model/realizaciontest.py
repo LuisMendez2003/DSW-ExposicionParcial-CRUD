@@ -10,7 +10,7 @@ class RealizacionTest(db.Model):
     fecha = db.Column(db.Date)
 
     puntaje = db.Column(db.Integer)
-    nivel = db.Column(db.String(20))
+    nivel = db.Column(db.String(30))
     observaciones = db.Column(db.String(100))
 
     test = db.relationship('Test', backref = 'realizaciones_test')

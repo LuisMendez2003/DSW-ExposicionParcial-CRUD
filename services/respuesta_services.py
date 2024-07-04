@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
+from model.alternativa import Alternativa
+from model.realizaciontest import RealizacionTest
 from utils.db import db
 from model.respuesta import Respuesta
 from schemas.realizaciontest_schema import RealizacionTestSchema
@@ -20,6 +22,8 @@ def create_respuesta():
     new_respuesta = Respuesta(id_realizaciontest=id_realizaciontest, alternativa=alternativa)
 
     db.session.add(new_respuesta)
+
+    # Guardar los cambios en la base de datos
     db.session.commit()
 
     result = respuesta_schema.dump(new_respuesta)
@@ -32,7 +36,34 @@ def create_respuesta():
 
     return make_response(jsonify(data), 201)
 
-# Obtener todas las Respuestas
+#Actualizar puntaje
+@respuesta_services.route('/actualizar_puntaje', methods=['POST'])
+def actualizar_puntaje():
+    id_realizaciontest = request.json.get('id_realizaciontest')
+
+    # Obtener todas las respuestas para la realizacion de test
+    respuestas = Respuesta.query.filter_by(id_realizaciontest=id_realizaciontest).all()
+
+    # Calcular el puntaje total sumando los puntajes de las alternativas
+    puntaje_total = sum(r.alternativa_relacionada.puntaje for r in respuestas if r.alternativa_relacionada)
+
+    # Obtener la realizacion de test y actualizar su puntaje
+    realizacion_test = RealizacionTest.query.get(id_realizaciontest)
+    if not realizacion_test:
+        return make_response(jsonify({'message': 'Realización de test no encontrada', 'status': 404}), 404)
+
+    realizacion_test.puntaje = puntaje_total
+    db.session.commit()
+
+    data = {
+        'message': 'Puntaje actualizado - Completado',
+        'puntaje': realizacion_test.puntaje,
+        'status': 200
+    }
+
+    return make_response(jsonify(data), 200)
+
+#Obtener todas las Respuestas
 @respuesta_services.route('/respuestas', methods=['GET'])
 def get_respuestas():
     all_respuestas = Respuesta.query.all()
