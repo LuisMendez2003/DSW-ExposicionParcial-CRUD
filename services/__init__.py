@@ -7,6 +7,7 @@ from services.alternativa_services import alternativa_services
 from services.realizaciontest_services import realizaciontest_services
 from services.respuesta_services import respuesta_services
 from services.preguntas_alternativas_services import preguntas_alternativas_services
+from services.ubigeo_services import ubigeo_services
 
 def register_services(app):
     app.register_blueprint(usuario_services)
@@ -18,3 +19,4 @@ def register_services(app):
     app.register_blueprint(realizaciontest_services)
     app.register_blueprint(respuesta_services)
     app.register_blueprint(preguntas_alternativas_services)
+    app.register_blueprint(ubigeo_services)
