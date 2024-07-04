@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from model.alternativa import Alternativa
+from model.nivel import Nivel
 from model.realizaciontest import RealizacionTest
 from utils.db import db
 from model.respuesta import Respuesta
@@ -53,6 +54,18 @@ def actualizar_puntaje():
         return make_response(jsonify({'message': 'Realización de test no encontrada', 'status': 404}), 404)
 
     realizacion_test.puntaje = puntaje_total
+
+    nivel = Nivel.query.filter(
+        Nivel.id_test == realizacion_test.id_test,
+        Nivel.min_puntaje <= puntaje_total,
+        Nivel.max_puntaje >= puntaje_total
+    ).first()
+
+    if nivel:
+        realizacion_test.nivel = nivel.descripcion
+    else:
+        realizacion_test.nivel = 'Indeterminado'
+
     db.session.commit()
 
     data = {
