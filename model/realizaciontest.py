@@ -20,3 +20,7 @@ class RealizacionTest(db.Model):
         self.id_test = id_test
         self.id_estudiante = id_estudiante
         self.fecha = fecha
+
+    def actualizar_observaciones(self,nuevas_observaciones):
+        self.observaciones = nuevas_observaciones
+        db.session.commit()

@@ -6,7 +6,7 @@ from marshmallow import fields
 class DistritoSchema(ma.Schema):
     class Meta:
         model = Distrito
-        fields = ('id','nombre','ubigeo','provincia_id','provincia')
+        fields = ('id','nombre','ubigeo','provincia_id','latitud','longitud','provincia')
     
     provincia = ma.Nested(ProvinciaSchema)
 

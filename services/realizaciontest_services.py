@@ -156,3 +156,31 @@ def delete_realizaciontest(id):
     }
 
     return make_response(jsonify(data), 200)
+
+@realizaciontest_services.route('/realizaciontest/<int:id_realizaciontest>/observaciones', methods=['PATCH'])
+def update_realizaciontest_observaciones(id_realizaciontest):
+    # Obtener la RealizacionTest por su ID
+    realizaciontest = RealizacionTest.query.get(id_realizaciontest)
+
+    if not realizaciontest:
+        data = {
+            'message': 'RealizacionTest no registrada',
+            'status': 404
+        }
+        return make_response(jsonify(data), 404)
+
+    # Obtener las nuevas observaciones desde la solicitud JSON
+    nuevas_observaciones = request.json.get('observaciones')
+
+    # Actualizar las observaciones de la RealizacionTest
+    realizaciontest.actualizar_observaciones(nuevas_observaciones)
+
+    # Preparar la respuesta JSON
+    result = realizacionTest_Schema.dump(realizaciontest)
+    data = {
+        'message': 'Observaciones de RealizacionTest actualizadas',
+        'status': 200,
+        'data': result
+    }
+
+    return make_response(jsonify(data), 200)
